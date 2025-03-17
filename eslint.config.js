@@ -32,4 +32,5 @@ module.exports = {
       version: 'detect',
     },
   },
+  ignorePatterns: ['webpack.config.js', 'node_modules/*', 'dist/*'],
 }
