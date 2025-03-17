@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Link, useParams } from 'react-router-dom'
 import LoadingSpinner from './LoadingSpinner'
 import { useApi } from './useApi'
@@ -59,6 +60,14 @@ const PokemonPage = ({ previous, next }) => {
       </div>
     </>
   )
+}
+PokemonPage.propTypes = {
+  previous: PropTypes.shape({
+    name: PropTypes.string,
+  }),
+  next: PropTypes.shape({
+    name: PropTypes.string,
+  }),
 }
 
 export default PokemonPage
