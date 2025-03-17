@@ -9,7 +9,10 @@
     "test": "jest",
     "eslint": "eslint './**/*.{js,jsx}'",
     "build": "webpack --mode production",
-    "lint": "eslint --fix --ext .js,.jsx ."
+    "lint": "eslint --fix --ext .js,.jsx .",
+    "cypress:open": "cypress open",
+    "start:test": "cross-env NODE_ENV=test node  cypress run",
+    "test:e2e": "cross-env NODE_ENV=test cypress run"
   },
   "repository": {
     "type": "git",
@@ -33,9 +36,12 @@
     "@testing-library/react": "^14.1.2",
     "babel-jest": "^29.7.0",
     "babel-loader": "^9.1.3",
+    "cross-env": "^7.0.3",
     "css-loader": "^6.8.1",
-    "eslint": "^8.56.0",
-    "eslint-plugin-jest": "^27.6.1",
+    "cypress": "^14.2.0",
+    "eslint": "^9.0.0",
+    "eslint-plugin-cypress": "^4.2.0",
+    "eslint-plugin-jest": "^28.11.0",
     "eslint-plugin-react": "^7.33.2",
     "history": "^5.3.0",
     "html-loader": "^4.2.0",
@@ -55,6 +61,9 @@
     "react-router-dom": "^6.21.1"
   },
   "jest": {
-    "testEnvironment": "jsdom"
+    "testEnvironment": "jsdom",
+    "testPathIgnorePatterns": [
+      "e2e-tests"
+    ]
   }
 }
