@@ -44,5 +44,5 @@ module.exports = [
   {
     ignores: ['webpack.config.js', 'node_modules/*', 'dist/*'],
   },
-  ...compat.extends('eslint:recommended', 'plugin:react/recommended'),
+  ...compat.extends('plugin:react/recommended'),
 ]
