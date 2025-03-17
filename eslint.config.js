@@ -7,9 +7,9 @@ module.exports = [
     languageOptions: {
       ecmaVersion: 2018,
       sourceType: 'module',
-      ecmaFeatures: {
-        jsx: true,
-      },
+      // ecmaFeatures: {
+      //   jsx: true,
+      // },
       globals: {
         browser: true,
         es6: true,
