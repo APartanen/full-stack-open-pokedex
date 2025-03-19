@@ -43,7 +43,7 @@ module.exports = {
   },
   devServer: {
     historyApiFallback: true,
-    allowedHosts: ['localhost', '127.0.0.1', 'https://full-stack-open-pokedex-nrib.onrender.com'],
+    allowedHosts: ['full-stack-open-pokedex-nrib.onrender.com'],
   },
   plugins: [
     new HtmlWebPackPlugin({
