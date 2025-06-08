@@ -1,5 +1,12 @@
 name: Deployment pipeline
 
+env:
+  CONDITION: ${{ contains('kissa', 'ss') && contains('koira', 'ra') && contains('pretty long array of criteria to repeat in multiple places', 'crit') }}
+  COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
+  COMMITS: ${{ toJson(github.event.commits) }}
+  GITHUB_CONTEXT: ${{ toJson(github) }}
+
+
 on:
   push:
     branches:
@@ -11,6 +18,7 @@ on:
 jobs:
   simple_deployment_pipeline:
     if: ${{ github.event_name == 'push' }}
+    if: ${{ !contains(join(github.event.commits.*.message, ' '), '#skip') }}
     runs-on: ubuntu-24.04
     permissions:
       contents: write
@@ -35,6 +43,20 @@ jobs:
           wait-on: http://localhost:5000
       - name: Trigger deployment
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
+  log_environment:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: github context
+        run: echo "$GITHUB_CONTEXT"
+      - name: commits
+        run: echo "$COMMITS"
+      - name: commit messages
+        run: echo "$COMMIT_MESSAGES"
+      - if: ${{ env.CONDITION == 'true' }}
+        run: echo 'this step is executed'
+      - if: ${{ env.CONDITION == 'false' }}
+        run: echo 'this step will not be executed'
   tag_release:
     if: ${{ github.event_name == 'push' }}
     needs: [simple_deployment_pipeline]
@@ -53,3 +75,4 @@ jobs:
         env:
           DEFAULT_BUMP: #patch
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
