@@ -12,19 +12,25 @@ jobs:
   simple_deployment_pipeline:
     if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-24.04
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
       - name: Install dependencies
         run: npm install
+
       - name: Lint
         run: npm run eslint
+
       - name: Build
         run: npm run build
       - name: Test
         run: npm run test
+
       - name: e2e tests
         uses: cypress-io/github-action@v5
         with:
@@ -33,3 +39,23 @@ jobs:
           wait-on: http://localhost:5000
       - name: Trigger deployment
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
+
+  tag_release:
+    if: ${{ github.event_name == 'push' }}
+    needs: [simple_deployment_pipeline]
+    runs-on: ubuntu-20.04
+    steps:  
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: npm install
+
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@v1 
+        env:
+          DEFAULT_BUMP: patch
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
